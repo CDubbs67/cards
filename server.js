@@ -7,8 +7,11 @@ const os = require('os');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve static assets from public/ directory
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve root folder client-side files securely
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+app.get('/style.css', (req, res) => res.sendFile(path.join(__dirname, 'style.css')));
+app.get('/app.js', (req, res) => res.sendFile(path.join(__dirname, 'app.js')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
 // QR code generation endpoint
 app.get('/api/qrcode', async (req, res) => {
