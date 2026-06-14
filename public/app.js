@@ -211,10 +211,6 @@ function renderGallery() {
     card.setAttribute('data-element', monster.element);
     card.setAttribute('data-id', monster.id);
     
-    // Generate scanned URL redirect
-    const targetUrl = `${window.location.origin}/?monster=${monster.id}`;
-    const qrApiUrl = `/api/qrcode?text=${encodeURIComponent(targetUrl)}`;
-    
     let htmlContent = '';
     
     if (isUnlocked) {
@@ -228,9 +224,7 @@ function renderGallery() {
           <h3 class="card-title">${monster.name}</h3>
           <p class="card-desc">${monster.lore.slice(0, 95)}...</p>
           <div class="card-qr-block">
-            <div class="qr-image-wrapper">
-              <img src="${qrApiUrl}" alt="QR code for ${monster.name}">
-            </div>
+            <div class="qr-image-wrapper" id="qr-${monster.id}"></div>
             <div class="qr-actions">
               <span class="qr-tip">Share code or scan on another device to transfer data.</span>
               <button class="btn btn-secondary btn-xs btn-view-portal" data-id="${monster.id}">Open Portal View</button>
@@ -254,9 +248,7 @@ function renderGallery() {
           <h3 class="card-title">???</h3>
           <p class="card-desc">Scan the corresponding digital matrix glyph to materialize and unlock this mysterious specimen's records.</p>
           <div class="card-qr-block">
-            <div class="qr-image-wrapper">
-              <img src="${qrApiUrl}" alt="Scan to unlock">
-            </div>
+            <div class="qr-image-wrapper" id="qr-${monster.id}"></div>
             <div class="qr-actions">
               <button class="btn btn-primary btn-xs btn-simulate" data-id="${monster.id}">Simulate Scan</button>
               <span class="qr-tip">Scan QR above with a phone or click "Simulate" to unlock.</span>
@@ -268,6 +260,17 @@ function renderGallery() {
     
     card.innerHTML = htmlContent;
     elGrid.appendChild(card);
+
+    // Generate QR Code dynamically client-side (fully compatible with GitHub Pages)
+    const targetUrl = `${window.location.origin}${window.location.pathname}?monster=${monster.id}`;
+    new QRCode(document.getElementById(`qr-${monster.id}`), {
+      text: targetUrl,
+      width: 78,
+      height: 78,
+      colorDark : "#0f172a",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.M
+    });
   });
   
   // Attach event handlers for newly rendered DOM cards
