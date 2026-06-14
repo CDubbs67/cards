@@ -83,8 +83,19 @@
           
           <div class="scanner-footer">
             <p class="scanner-tip">Point your device camera at any monster QR Code displayed on another screen or printed out.</p>
+            
+            <div class="scanner-fallback-upload">
+              <div class="fallback-divider"><span>OR</span></div>
+              <p class="fallback-tip">Camera stream blocked or unavailable? Take a photo of the QR Code instead:</p>
+              <label class="btn btn-secondary btn-upload-label" for="qr-file-input">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+                Upload / Take Photo
+              </label>
+              <input type="file" id="qr-file-input" accept="image/*" capture="environment" style="display: none;">
+            </div>
+
             <div class="scanner-troubleshoot">
-              <p>Can't access camera? You can simulate scanning on any monster card using the <strong>"Simulate Scan"</strong> button on the dashboard!</p>
+              <p>You can also click <strong>"Simulate Scan"</strong> on any monster card to view its portal detail records immediately.</p>
             </div>
           </div>
         </div>

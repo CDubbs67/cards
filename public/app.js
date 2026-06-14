@@ -449,6 +449,12 @@ function startScanner() {
     return;
   }
   
+  // Reset scan viewport overlays
+  const elReticle = document.querySelector('.scanner-reticle');
+  if (elReticle) elReticle.style.display = 'block';
+  const elReader = document.getElementById('interactive-reader');
+  if (elReader) elReader.innerHTML = '';
+  
   switchView('scanner');
   playSound('scanner-start');
   
@@ -466,16 +472,28 @@ function startScanner() {
     { facingMode: "environment" },
     config,
     (decodedText) => {
-      // Handle Success
       handleScanSuccess(decodedText);
     },
     (errorMessage) => {
       // Suppress spamming errors
     }
   ).catch(err => {
-    console.error("Camera initialisation failure:", err);
-    alert("Failed to initialize camera. Make sure you grant camera permissions, or use 'Simulate Scan' directly on the dashboard cards.");
-    switchView('gallery');
+    console.warn("Live camera connection failed:", err);
+    
+    // Hide overlay outline reticle
+    if (elReticle) elReticle.style.display = 'none';
+    
+    // Show descriptive secure-context camera error
+    if (elReader) {
+      elReader.innerHTML = `
+        <div class="scanner-camera-error">
+          <svg class="icon error-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+          <div class="error-title">Live Video Unavailable</div>
+          <div class="error-subtitle">Mobile browsers restrict camera streams over non-secure HTTP networks. Connect via HTTPS, localhost, or upload a photo below!</div>
+          <div class="error-tip">Tap <strong>Upload / Take Photo</strong> below to scan.</div>
+        </div>
+      `;
+    }
   });
 }
 
@@ -570,6 +588,30 @@ function setupEventListeners() {
       updateProgressUI();
     }
   });
+
+  // Handle QR code scanning from file upload/photo capture
+  const fileInput = document.getElementById('qr-file-input');
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length === 0) return;
+      
+      const imageFile = e.target.files[0];
+      const fileScanner = new Html5Qrcode("interactive-reader");
+      
+      fileScanner.scanFile(imageFile, true)
+        .then(decodedText => {
+          playSound('click');
+          if (activeScanner) {
+            stopScanner();
+          }
+          processDecodedString(decodedText);
+        })
+        .catch(err => {
+          console.error("QR image read error:", err);
+          alert("Could not detect any valid QR Code glyph. Please make sure the photo is clear, well-lit, and the QR code is centered.");
+        });
+    });
+  }
 
   // Resume AudioContext on first touch/click interaction
   document.body.addEventListener('click', () => {

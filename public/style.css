@@ -931,3 +931,109 @@ header {
     font-size: 2rem;
   }
 }
+
+/* Fallback Upload & Camera Error Layouts */
+.scanner-fallback-upload {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  border-top: 1px solid var(--border-glass);
+  padding-top: 1.25rem;
+}
+
+.fallback-divider {
+  width: 100%;
+  text-align: center;
+  position: relative;
+  margin-bottom: 0.25rem;
+}
+
+.fallback-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border-glass);
+  z-index: 1;
+}
+
+.fallback-divider span {
+  background: #111827; /* Dark block to hide center line */
+  padding: 0 0.75rem;
+  font-size: 0.7rem;
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--text-muted);
+  position: relative;
+  z-index: 2;
+  letter-spacing: 0.05em;
+}
+
+.fallback-tip {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.btn-upload-label {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.8rem;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid var(--border-glass);
+}
+
+.btn-upload-label:hover {
+  background: #334155;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.scanner-camera-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  background: rgba(15, 23, 42, 0.98);
+  color: var(--text-primary);
+  z-index: 20;
+}
+
+.error-icon {
+  width: 48px;
+  height: 48px;
+  fill: var(--color-fire);
+  margin-bottom: 1rem;
+}
+
+.error-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.error-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  max-width: 320px;
+  margin-bottom: 1.25rem;
+}
+
+.error-tip {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.error-tip strong {
+  color: var(--color-ice);
+}
+
